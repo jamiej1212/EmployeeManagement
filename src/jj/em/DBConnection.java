@@ -39,7 +39,7 @@ public class DBConnection
     {
         try
         {
-            String SQL = "SELECT * FROM ADMIN WHERE adminID = " + adminID + " and adminPassword = " + adminPSWD;
+            String SQL = "SELECT * FROM ADMIN WHERE adminID = '" + adminID + "' and adminPassword = '" + adminPSWD +"'";
             // connect to DB
             // resultSet = SQL execution output
             resultSet = statement.executeQuery(SQL);
