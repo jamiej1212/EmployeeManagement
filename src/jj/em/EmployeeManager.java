@@ -1,14 +1,16 @@
 package jj.em;
 
 /**
+ * Main Class
  * This program helps employers to manage their employees
  */
 
-// Main method
 public class EmployeeManager
 {
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args)
+    {
+        DBConnection dbConnection = new DBConnection();
+        System.out.println("Admin confirmation: " + dbConnection.isAdmin("admin", "admin1234"));
     }
 }
