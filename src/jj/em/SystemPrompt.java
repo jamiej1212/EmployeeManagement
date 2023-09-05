@@ -279,9 +279,4 @@ public class SystemPrompt implements ActionListener
             JOptionPane.showMessageDialog(null, "Address must include city, state, and zipcode");
     }
 
-    public void primaryKeyViolation()
-    {
-        JOptionPane.showMessageDialog(null, "This employee exists in the DB\n" + "Please use modify instead");
-
-    }
 }

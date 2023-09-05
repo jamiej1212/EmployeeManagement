@@ -93,12 +93,10 @@ public class DBConnection
     public void insertData(int id, String lastName, String firstName, int age, String jobTitle, double salary,
                            String email, String address)
     {
-        SystemPrompt sp = new SystemPrompt();
         try
         {
             String sql = "INSERT INTO employees " + "VALUES(?, ?, ?, ?, ?, ?, ?, ?) ";
             statement = connection.prepareStatement(sql);
-            resultSet = statement.executeQuery(sql);
 
 
             statement.setInt(1, id);
@@ -118,8 +116,7 @@ public class DBConnection
         {
             if(e.getErrorCode() == 1062)
             {
-                sp.inputValidation();
-                //e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "This employee exists in the DB\n" + "Please use modify instead");
             }
         }
 

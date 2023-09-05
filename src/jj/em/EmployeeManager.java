@@ -12,10 +12,10 @@ public class EmployeeManager
     {
         //DBConnection dbConnection = new DBConnection();
         //System.out.println("Admin confirmation: " + dbConnection.isAdmin("admin", "admin1"));
-        LoginPrompt lp = new LoginPrompt();
-        lp.loginManager();
-        //SystemPrompt sp = new SystemPrompt();
-        //sp.systemManager();
+        //LoginPrompt lp = new LoginPrompt();
+        //lp.loginManager();
+        SystemPrompt sp = new SystemPrompt();
+        sp.systemManager();
 
 
     }
