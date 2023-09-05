@@ -10,7 +10,7 @@ public class DBConnection
     // Connection object
     private Connection connection;
     // Allows to use query to designate DB
-    private Statement statement;
+    private PreparedStatement statement;
     // Gets output
     private ResultSet resultSet;
 
@@ -24,14 +24,13 @@ public class DBConnection
         // Check if connection failed
         try
         {
-            System.out.println("Connected successfully");
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            statement = connection.createStatement();
+            System.out.println("Connected successfully");
         }
-        catch(Exception e)
+        catch(ClassNotFoundException | SQLException e)
         {
-            System.out.println("Connection failed: " + e.getMessage());
+           e.printStackTrace();
         }
     }
 
@@ -39,15 +38,19 @@ public class DBConnection
     {
         try
         {
-            String SQL = "SELECT * FROM ADMIN WHERE adminID = '" + adminID + "' and adminPassword = '" + adminPSWD +"'";
-            // connect to DB
-            // resultSet = SQL execution output
-            resultSet = statement.executeQuery(SQL);
+            String sql = "SELECT * FROM ADMIN WHERE adminID = '" + adminID + "' and adminPassword = '" + adminPSWD +"'";
+            // Send sql to the DB
+            statement = connection.prepareStatement(sql);
+            // resultSet = sql execution output
+            resultSet = statement.executeQuery(sql);
             // if data found, return true. Otherwise, return false
             if(resultSet.next())
             {
+                System.out.println("Successfully Logged in");
                 return true;
             }
+            System.out.println(adminID + " " + adminPSWD);
+
         }
         catch(Exception e)
         {
