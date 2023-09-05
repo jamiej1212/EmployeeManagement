@@ -18,7 +18,9 @@ public class DBConnection
     private static final String PASSWORD = "1234"; // DBMS Password
     private static final String URL = "jdbc:mysql://localhost:3306/employee_management"; // DBMS URL
 
-    // Constructor
+    /**
+     * Constructor
+     */
     public DBConnection()
     {
         // Check if connection failed
@@ -34,6 +36,12 @@ public class DBConnection
         }
     }
 
+    /**
+     * A method that checks login information is matched
+     * @param adminID Administrator's ID
+     * @param adminPSWD Administrator's Password
+     * @return true if the info is matched
+     */
     public boolean isAdmin(String adminID, String adminPSWD)
     {
         try
@@ -49,13 +57,14 @@ public class DBConnection
                 System.out.println("Successfully Logged in");
                 return true;
             }
-            System.out.println(adminID + " " + adminPSWD);
 
         }
         catch(Exception e)
         {
-            System.out.println("Wrong ID or Password is entered" + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
+
+        System.out.println("Wrong ID or Password is Entered");
         return false;
     }
 

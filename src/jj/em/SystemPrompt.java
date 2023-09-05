@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class SystemPrompt
+public class SystemPrompt implements ActionListener
 {
     private static JFrame loginFrame = new JFrame();
     private static JPanel loginPanel = new JPanel();
@@ -49,8 +52,10 @@ public class SystemPrompt
         loginBtn.setBounds(68, 150, 80, 25);
         cancelBtn.setBounds(152, 150, 80, 25);
 
-
         // ActionListener Settings
+        loginBtn.addActionListener(new SystemPrompt());
+        cancelBtn.addActionListener(new SystemPrompt());
+        /*
         loginBtn.addActionListener(e ->
         {
             userID = idTextField.getText();
@@ -59,16 +64,28 @@ public class SystemPrompt
             dbConnection.isAdmin(userID, password);
         });
         cancelBtn.addActionListener(e -> System.exit(0));
-
+         */
 
         // Visibility Settings
         loginFrame.pack();
         loginFrame.setVisible(true);
 
+
     }
-    public void passAdmin()
+    @Override
+    public void actionPerformed(ActionEvent e)
     {
+        if(e.getSource() == cancelBtn)
+        {
+            System.exit(0);
+        }
+        else
+        {
+            userID = idTextField.getText();
+            password = new String(pswdField.getPassword());
+            DBConnection dbConnection = new DBConnection();
+            dbConnection.isAdmin(userID, password);
+        }
 
     }
-
 }
