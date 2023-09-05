@@ -63,6 +63,23 @@ public class DBConnection
         {
             System.out.println("Error: " + e.getMessage());
         }
+        /*
+            1. printStackTrace() : java.lang.Error inherited into java.lang.Exception
+                Displays the name of the exception, nature of the message, and line number
+            2. getMessage() : java.lang.Throwable inherited into java.lang.Exception
+                Displays only exception message
+                finally
+        {
+            try
+            {
+                connection.close();
+            }
+            catch(SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+         */
 
         System.out.println("Wrong ID or Password is Entered");
         return false;
