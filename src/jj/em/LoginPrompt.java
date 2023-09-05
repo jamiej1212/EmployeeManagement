@@ -134,6 +134,7 @@ public class LoginPrompt implements ActionListener
     {
         if(e.getSource() == cancelBtn)
         {
+            System.out.println("Button Pressed");
             System.exit(0);
         }
         else
@@ -142,10 +143,12 @@ public class LoginPrompt implements ActionListener
             password = new String(pswdField.getPassword());
             DBConnection dbConnection = new DBConnection();
             dbConnection.isAdmin(userID, password);
-            //if(dbConnection.isAdmin(userID, password) == true)
-            //{
-
-            //}
+            if(dbConnection.isAdmin(userID, password))
+            {
+                frame.dispose();
+                SystemPrompt sp = new SystemPrompt();
+                sp.systemManager();
+            }
         }
 
     }

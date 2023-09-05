@@ -2,39 +2,43 @@ package jj.em;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Objects;
 
-public class SystemPrompt
+public class SystemPrompt implements ActionListener
 {
-    JFrame frame = new JFrame();
-    JPanel panel = new JPanel();
+    private static JFrame frame = new JFrame();
+    private static JPanel panel = new JPanel();
     // Labels
-    JLabel programTitle = new JLabel("Employee Manager");
-    JLabel idLabel = new JLabel("ID: ");
-    JLabel lastNameLabel = new JLabel("Last Name: ");
-    JLabel firstNameLabel = new JLabel("First Name: ");
-    JLabel ageLabel = new JLabel("Age: ");
-    JLabel jobTitleLabel = new JLabel("Job Title: ");
-    JLabel salaryLabel = new JLabel("Salary: ");
-    JLabel emailLabel = new JLabel("Email: ");
-    JLabel addressLabel = new JLabel("Address: ");
+    private static JLabel programTitle = new JLabel("Employee Manager");
+    private static JLabel idLabel = new JLabel("ID: ");
+    private static JLabel lastNameLabel = new JLabel("Last Name: ");
+    private static JLabel firstNameLabel = new JLabel("First Name: ");
+    private static JLabel ageLabel = new JLabel("Age: ");
+    private static JLabel jobTitleLabel = new JLabel("Job Title: ");
+    private static JLabel salaryLabel = new JLabel("Salary: ");
+    private static JLabel emailLabel = new JLabel("Email: ");
+    private static JLabel addressLabel = new JLabel("Address: ");
 
     // TextFields
-    JTextField idField = new JTextField("Must be 8 digits");
-    JTextField lastNameField = new JTextField("Must be letters");
-    JTextField firstNameField = new JTextField("Must be letters");
-    JTextField ageField = new JTextField("Must be 2 digits");
-    JTextField jobTitleField = new JTextField("Must be letters");
-    JTextField salaryField = new JTextField("Must include decimals");
-    JTextField emailField = new JTextField("Must include @ and .");
-    JTextField addressField = new JTextField("Must be full address");
-    JTextField searchField = new JTextField();
+    private static JTextField idField = new JTextField();
+    private static JTextField lastNameField = new JTextField();
+    private static JTextField firstNameField = new JTextField();
+    private static JTextField ageField = new JTextField();
+    private static JTextField jobTitleField = new JTextField();
+    private static JTextField salaryField = new JTextField();
+    private static JTextField emailField = new JTextField();
+    private static JTextField addressField = new JTextField();
+    private static JTextField searchField = new JTextField();
 
     // Buttons
-    JButton addBtn = new JButton("Add");
-    JButton updateBtn = new JButton("Modify");
-    JButton cancelBtn = new JButton("Cancel");
-    JButton searchBtn = new JButton("Search");
+    private static JButton addBtn = new JButton("Add");
+    private static JButton updateBtn = new JButton("Update");
+    private static JButton cancelBtn = new JButton("Cancel");
+    private static JButton searchBtn = new JButton("Search");
 
     // Table
     JTable table = new JTable();
@@ -42,6 +46,11 @@ public class SystemPrompt
     JLabel programIcon = new JLabel();
     String iconAddress = "/pngs/employer.png";
     ImageIcon icon = new ImageIcon(Objects.requireNonNull(SystemPrompt.class.getResource(iconAddress)));
+
+    // User Inputs
+    int id, age = 0;
+    String lastName, firstName, jobTitle, email, address = "";
+    double salary = 0.0;
 
     public void systemManager()
     {
@@ -58,7 +67,7 @@ public class SystemPrompt
         // Button Settings
         buttonSetting();
         // ActionListener Settings
-
+        actionListenerSetting();
     }
 
     // This method sets frame
@@ -145,5 +154,134 @@ public class SystemPrompt
         panel.add(searchBtn);
     }
 
+    // This method adds ActionListener to buttons
+    public void actionListenerSetting()
+    {
+        addBtn.addActionListener(new SystemPrompt());
+        updateBtn.addActionListener(new SystemPrompt());
+        cancelBtn.addActionListener(new SystemPrompt());
+        searchBtn.addActionListener(new SystemPrompt());
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if(e.getSource() == cancelBtn)
+        {
+            System.out.println("Cancel Button Pressed");
+            System.exit(0);
+        }
+        else if(e.getSource() == addBtn)
+        {
+            if(inputValidation())
+            {
+                inputValidation();
+                getInputID();
+                getLastName();
+                getFirstName();
+                getAge();
+                getJobTitle();
+                getSalary();
+                getEmail();
+                getAddress();
+                DBConnection db = new DBConnection();
+                db.insertData(id, lastName, firstName, age, jobTitle, salary, email, address);
+
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Please fill all boxes");
+            }
+            System.out.println("Add Button Pressed");
+
+        }
+        else if(e.getSource() == updateBtn)
+        {
+            System.out.println("Update Button Pressed");
+        }
+        else if(e.getSource() == searchBtn)
+        {
+            System.out.println("Search Button Pressed");
+        }
+    }
+
+    public boolean inputValidation()
+    {
+        return !idField.getText().isEmpty() && !lastNameField.getText().isEmpty() && !firstNameField.getText().isEmpty() && !ageField.getText().isEmpty()
+                && !jobTitleField.getText().isEmpty() && !salaryField.getText().isEmpty() && !emailField.getText().isEmpty() && !addressField.getText().isEmpty();
+    }
+    public void getInputID()
+    {
+        if(idField.getText().length() == 8 && idField.getText().matches("[0-9]+"))
+        {
+            id = Integer.parseInt(idField.getText());
+            System.out.println(id);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "ID must be 8 digits");
+        }
+
+    }
+
+    public void getLastName()
+    {
+        if(lastNameField.getText().matches("[a-zA-Z]*"))
+            lastName = lastNameField.getText();
+        else
+            JOptionPane.showMessageDialog(null, "Last name must be letters");
+    }
+
+    public void getFirstName()
+    {
+        if(firstNameField.getText().matches("[a-zA-Z]*"))
+            firstName = firstNameField.getText();
+        else
+            JOptionPane.showMessageDialog(null, "First name must be letters");
+    }
+
+    public void getAge()
+    {
+        if(ageField.getText().length() == 2 && ageField.getText().matches("[0-9]+"))
+            age = Integer.parseInt(ageField.getText());
+        else
+            JOptionPane.showMessageDialog(null, "Age must be 2 digits");
+    }
+    public void getJobTitle()
+    {
+        if(jobTitleField.getText().matches("^[ a-zA-Z]+$"))
+            jobTitle = jobTitleField.getText();
+        else
+            JOptionPane.showMessageDialog(null, "Job title must be letters");
+    }
+
+    public void getSalary()
+    {
+        if(salaryField.getText().matches("[0-9]+([.][0-9]+)*"))
+            salary = Double.parseDouble(salaryField.getText());
+        else
+            JOptionPane.showMessageDialog(null, "Salary must be numeric");
+    }
+
+    public void getEmail()
+    {
+        if(emailField.getText().contains("@") && emailField.getText().contains("."))
+            email = emailField.getText();
+        else
+            JOptionPane.showMessageDialog(null, "Invalid email address");
+    }
+
+    public void getAddress()
+    {
+        if(addressField.getText().contains(","))
+            address = addressField.getText();
+        else
+            JOptionPane.showMessageDialog(null, "Address must include city, state, and zipcode");
+    }
+
+    public void primaryKeyViolation()
+    {
+        JOptionPane.showMessageDialog(null, "This employee exists in the DB\n" + "Please use modify instead");
+
+    }
 }

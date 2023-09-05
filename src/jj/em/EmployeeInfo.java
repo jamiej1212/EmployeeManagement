@@ -28,9 +28,9 @@ public class EmployeeInfo
         this.address = address;
     }
 
-    public void passInfo()
+    public EmployeeInfo Employee()
     {
-
+        return new EmployeeInfo(id, lastName,firstName, age, jobTitle, salary, email, address);
     }
 
 }

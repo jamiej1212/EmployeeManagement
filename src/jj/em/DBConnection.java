@@ -1,5 +1,7 @@
 package jj.em;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.sql.*;
 
 /**
@@ -57,6 +59,10 @@ public class DBConnection
                 System.out.println("Successfully Logged in");
                 return true;
             }
+            if(statement != null)
+                statement.close();
+            if(connection != null)
+                connection.close();
 
         }
         catch(Exception e)
@@ -80,9 +86,43 @@ public class DBConnection
             }
         }
          */
-
         System.out.println("Wrong ID or Password is Entered");
         return false;
+    }
+
+    public void insertData(int id, String lastName, String firstName, int age, String jobTitle, double salary,
+                           String email, String address)
+    {
+        SystemPrompt sp = new SystemPrompt();
+        try
+        {
+            String sql = "INSERT INTO employees " + "VALUES(?, ?, ?, ?, ?, ?, ?, ?) ";
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery(sql);
+
+
+            statement.setInt(1, id);
+            statement.setString(2, lastName);
+            statement.setString(3, firstName);
+            statement.setInt(4, age);
+            statement.setString(5, jobTitle);
+            statement.setDouble(6, salary);
+            statement.setString(7, email);
+            statement.setString(8, address);
+
+
+            int result = statement.executeUpdate();
+            System.out.println(result+ "inputs are entered");
+        }
+        catch(SQLException e)
+        {
+            if(e.getErrorCode() == 1062)
+            {
+                sp.inputValidation();
+                //e.printStackTrace();
+            }
+        }
+
     }
 
 }
